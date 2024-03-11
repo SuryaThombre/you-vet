@@ -5,16 +5,15 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, useNavigation } from "expo-router";
+import { Stack, useNavigation} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { AntDesign } from '@expo/vector-icons';
 
 import { useColorScheme } from "@/components/useColorScheme";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Text, View } from "@/components/Themed";
 import { Pressable } from "react-native";
-import MyHeader from "@/components/profileHeader";
-import { Header, HeaderBackButton, getHeaderTitle } from '@react-navigation/elements';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -23,7 +22,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(profileSetUp)",
+  initialRouteName: "(tabs)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -31,7 +30,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require("../../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
@@ -55,23 +54,26 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   return (
-    <SafeAreaView edges={["top"]} style={{ flex: 1, backgroundColor: "white" }}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack
-          // initialRouteName="(profileSetUp)"
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          <Stack.Screen
-            name="(profileSetUp)"
-            options={{ headerShown: false }}
-          />
-        </Stack>
-      </ThemeProvider>
-    </SafeAreaView>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack
+      >
+        <Stack.Screen name="index" options={{ 
+          headerTitle: () => (
+            <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
+            <Pressable onPress={() => navigation.goBack()} >
+            <AntDesign name="arrowleft" size={20} color="black" />
+          </Pressable>
+            <Text style={{fontWeight: '600', fontSize: 24, marginLeft: 20}}>Overview</Text>
+          </View>
+          ),
+          headerBackVisible: true,
+
+        }} />
+        {/* <Stack.Screen name="ProfileSetUp" options={{ headerShown: false }} /> */}
+      </Stack>
+    </ThemeProvider>
   );
 }
