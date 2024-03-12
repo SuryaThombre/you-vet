@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { Stack } from 'expo-router'
+import {BarGraph} from '../../components/Barchart/BarChart'
 
 const Dashboard = () => {
   return (
     <View>
-      <Text>Dashboard</Text>
+      <Text>Dashboard
+      </Text>
+      <BarGraph/>
     </View>
   )
 }

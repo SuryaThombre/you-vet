@@ -68,7 +68,7 @@ function RootLayoutNav() {
               {/* <Pressable onPress={() => navigation.goBack()} >
               <AntDesign name="arrowleft" size={20} color="black" />
             </Pressable> */}
-              <Text style={{fontWeight: '600', fontSize: 24, marginLeft: 20}}>Profile set up</Text>
+                 <Text style={{flex:1, fontWeight: '600', fontSize: 24, textAlign: 'center', marginRight:35 }}>Profile set up</Text>
             </View>
           ),
           headerBackVisible: true,
@@ -79,7 +79,7 @@ function RootLayoutNav() {
               <Pressable onPress={() => navigation.goBack()} >
               <AntDesign name="arrowleft" size={20} color="black" />
             </Pressable>
-              <Text style={{fontWeight: '600', fontSize: 24, marginLeft: 20}}>Profile set up</Text>
+            <Text style={{flex:1, fontWeight: '600', fontSize: 24, textAlign: 'center', paddingRight:70 }}>Profile set up</Text>
             </View>
           ),
           headerBackVisible: true,
@@ -90,7 +90,7 @@ function RootLayoutNav() {
             <Pressable onPress={() => navigation.goBack()} >
             <AntDesign name="arrowleft" size={20} color="black" />
           </Pressable>
-            <Text style={{fontWeight: '600', fontSize: 24, marginLeft: 20}}>Profile set up</Text>
+          <Text style={{flex:1, fontWeight: '600', fontSize: 24, textAlign: 'center', paddingRight:70 }}>Profile set up</Text>
           </View>
           ),
           headerBackVisible: true,
