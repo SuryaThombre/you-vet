@@ -1,15 +1,22 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
+import { StyleSheet } from "react-native";
+import { ScrollView } from 'react-native-virtualized-view'
+import React from "react";
+import { BarGraph } from "../../components/Barchart/BarChart";
+import DynamicPieChart from "../../components/PieChart/DynamicPieChart";
+import CityDropDown from "../../components/CityDropDown/CityDropDown";
 
 const Dashboard = () => {
   return (
-    <View>
-      <Text>Dashboard</Text>
-    </View>
-  )
-}
+    <>
+    <ScrollView>
+      <CityDropDown />
+      <DynamicPieChart />
+      <BarGraph />
+    </ScrollView>
+    </>
+  );
+};
 
-export default Dashboard
+export default Dashboard;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
