@@ -123,7 +123,7 @@ function RootLayoutNav() {
           }}
         />
         
-             <Stack.Screen name="locationScreen" options={{ 
+            <Stack.Screen name="locationScreen" options={{ 
           headerTitle: () => (
             <View style={{flex:1, flexDirection: 'row', alignItems: 'flex-start', gap: 10}}>
             <Pressable onPress={() => navigation.goBack()} >
