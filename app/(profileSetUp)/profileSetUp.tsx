@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useColorScheme } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Button, Chip } from 'react-native-paper';
 import NextButton from "@/components/NextButton";
@@ -20,9 +20,10 @@ const ProfileSetup = () => {
   const [selectedRacialIdentity, setSelectedRacialIdentity] = useState<RacialIdentity | null>(null);
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState(false);
   const navigation = useNavigation(); // Initialize useNavigation hook
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
-        if (selectedGender && selectedPolitical && selectedRacialIdentity) {
+    if (selectedGender && selectedPolitical && selectedRacialIdentity) {
       setIsNextButtonEnabled(true);
     } else {
       setIsNextButtonEnabled(false);
@@ -46,86 +47,86 @@ const ProfileSetup = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colorScheme === 'dark' ? '#000000' : '#ffffff' }]}>
       <View>
-        <Text style={styles.pageInfo}>Tell us a bit about yourself. This information will not be public. It allows you to compare your vets with others.</Text>
-     
-        <Text style={styles.label}>Gender</Text>
+        <Text style={[styles.pageInfo, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>Tell us a bit about yourself. This information will not be public. It allows you to compare your vets with others.</Text>
+
+        <Text style={[styles.label, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>Gender</Text>
         <ScrollView>
-        <View style={styles.optionContainer}>
-          {GenderOptions.map((gender) => (
-            <Chip
-              key={gender}
-              style={[
-                styles.chip,
-                selectedGender === gender && styles.selectedChip,
-              ]}
-              icon={({ size, color }) => (
-                selectedGender === gender ?
-                  <AntDesign
-                    name="check"
-                    size={size}
-                    color="#F15D22"
-                  />
-                  : null
-              )}
-              onPress={() => handleGenderSelect(gender)}
-              selected={selectedGender === gender}
-            >
-              <Text style={[styles.chipText, selectedGender === gender && styles.selectedChipText]}>{gender}</Text>
-            </Chip>
-          ))}
-        </View>
-        <Text style={styles.label}>Political Preferences</Text>
-        <View style={styles.optionContainer}>
-          {PoliticalOptions.map((political) => (
-            <Chip
-              key={political}
-              style={[
-                styles.chip,
-                selectedPolitical === political && styles.selectedChip,
-              ]}
-              icon={({ size, color }) => (
-                selectedPolitical === political ?
-                  <AntDesign
-                    name="check"
-                    size={size}
-                    color="#F15D22"
-                  />
-                  : null
-              )}
-              onPress={() => handlePoliticalSelect(political)}
-              selected={selectedPolitical === political}
-            >
-              <Text style={[styles.chipText, selectedPolitical === political && styles.selectedChipText]}>{political}</Text>
-            </Chip>
-          ))}
-        </View>
-        <Text style={styles.label}>Racial Identity</Text>
-        <View style={styles.optionContainer}>
-          {RacialIdentityOptions.map((racialIdentity) => (
-            <Chip
-              key={racialIdentity}
-              style={[
-                styles.chip,
-                selectedRacialIdentity === racialIdentity && styles.selectedChip,
-              ]}
-              icon={({ size, color }) => (
-                selectedRacialIdentity === racialIdentity ?
-                  <AntDesign
-                    name="check"
-                    size={size}
-                    color="#F15D22"
-                  />
-                  : null
-              )}
-              onPress={() => handleRacialIdentitySelect(racialIdentity)}
-              selected={selectedRacialIdentity === racialIdentity}
-            >
-              <Text style={[styles.chipText, selectedRacialIdentity === racialIdentity && styles.selectedChipText]}>{racialIdentity}</Text>
-            </Chip>
-          ))}
-        </View>
+          <View style={styles.optionContainer}>
+            {GenderOptions.map((gender) => (
+              <Chip
+                key={gender}
+                style={[
+                  styles.chip,
+                  selectedGender === gender && styles.selectedChip,
+                ]}
+                icon={({ size, color }) => (
+                  selectedGender === gender ?
+                    <AntDesign
+                      name="check"
+                      size={size}
+                      color="#F15D22"
+                    />
+                    : null
+                )}
+                onPress={() => handleGenderSelect(gender)}
+                selected={selectedGender === gender}
+              >
+                <Text style={[styles.chipText, selectedGender === gender && styles.selectedChipText]}>{gender}</Text>
+              </Chip>
+            ))}
+          </View>
+          <Text style={[styles.label, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>Political Preferences</Text>
+          <View style={styles.optionContainer}>
+            {PoliticalOptions.map((political) => (
+              <Chip
+                key={political}
+                style={[
+                  styles.chip,
+                  selectedPolitical === political && styles.selectedChip,
+                ]}
+                icon={({ size, color }) => (
+                  selectedPolitical === political ?
+                    <AntDesign
+                      name="check"
+                      size={size}
+                      color="#F15D22"
+                    />
+                    : null
+                )}
+                onPress={() => handlePoliticalSelect(political)}
+                selected={selectedPolitical === political}
+              >
+                <Text style={[styles.chipText, selectedPolitical === political && styles.selectedChipText]}>{political}</Text>
+              </Chip>
+            ))}
+          </View>
+          <Text style={[styles.label, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>Racial Identity</Text>
+          <View style={styles.optionContainer}>
+            {RacialIdentityOptions.map((racialIdentity) => (
+              <Chip
+                key={racialIdentity}
+                style={[
+                  styles.chip,
+                  selectedRacialIdentity === racialIdentity && styles.selectedChip,
+                ]}
+                icon={({ size, color }) => (
+                  selectedRacialIdentity === racialIdentity ?
+                    <AntDesign
+                      name="check"
+                      size={size}
+                      color="#F15D22"
+                    />
+                    : null
+                )}
+                onPress={() => handleRacialIdentitySelect(racialIdentity)}
+                selected={selectedRacialIdentity === racialIdentity}
+              >
+                <Text style={[styles.chipText, selectedRacialIdentity === racialIdentity && styles.selectedChipText]}>{racialIdentity}</Text>
+              </Chip>
+            ))}
+          </View>
         </ScrollView>
       </View>
       <View style={styles.buttonContainer}>
@@ -135,7 +136,7 @@ const ProfileSetup = () => {
           )}
           mode="outlined"
           onPress={handlePrevious}
-          style={styles.previousButton}
+          style={[styles.previousButton, { borderColor: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}
           labelStyle={styles.buttonTextPrevious}
         >
           Previous
@@ -151,7 +152,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: '#ffffff',
   },
   pageInfo: {
     fontSize: 18,
@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
   },
   chipText: {
     color: '#333333',
-    fontFamily:''
   },
   selectedChip: {
     backgroundColor: '#fef9f8',
@@ -194,13 +193,10 @@ const styles = StyleSheet.create({
   },
   previousButton: {
     width: '35%',
-    borderColor: '#000000',
-    borderWidth: 1,
     borderRadius: 500,
   },
   buttonTextPrevious: {
     fontSize: 18,
-    color: '#000000',
   },
 });
 

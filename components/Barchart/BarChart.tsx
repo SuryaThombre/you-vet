@@ -1,126 +1,612 @@
 // @ts-nocheck - may need to be at the start of file
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, useColorScheme } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
-import { Dropdown } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import mockData from '../../Mock_Data/MOCK_DATA.json'
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import mockData from "../../Mock_Data/MOCK_DATA.json";
 
+//array for labels bwlow the bar graph
 const data = [
-  { label: 'Age', value: '1' },
-  { label: 'Gender', value: '2' },
-  { label: 'Politics', value: '3' },
-  { label: 'Race', value: '4' },
+  { label: "Age", value: "1" },
+  { label: "Gender", value: "2" },
+  { label: "Politics", value: "3" },
+  { label: "Race", value: "4" },
 ];
 
 export function BarGraph() {
-  const barData = [
+  const [value, setValue] = useState(null);
+  const [barLabels, setBarLabels] = useState([
+    "18-25",
+    "26-40",
+    "41-60",
+    "60+, y/o",
+  ]);
+  const [selectedDropdownValue, setSelectedDropdownValue] = useState("1");
+  const colorScheme = useColorScheme();
+  //functions for filter the bar graph data
+
+  const ageFilterData = (vote, minAge, maxAge = Infinity) => {
+    return mockData.filter(
+      (item) => item.vote === vote && item.age >= minAge && item.age <= maxAge
+    );
+  };
+
+  const legitData1825 = ageFilterData("Legit", 18, 25);
+  const noIdea1825 = ageFilterData("No Idea", 18, 25);
+  const seemsOff1825 = ageFilterData("Seems Off", 18, 25);
+
+  const legitData2640 = ageFilterData("Legit", 26, 40);
+  const noIdea2640 = ageFilterData("No Idea", 26, 40);
+  const seemsOff2640 = ageFilterData("Seems Off", 26, 40);
+
+  const legitData4160 = ageFilterData("Legit", 41, 60);
+  const noIdea4160 = ageFilterData("No Idea", 41, 60);
+  const seemsOff4160 = ageFilterData("Seems Off", 41, 60);
+
+  const legitData60Above = ageFilterData("Legit", 60);
+  const noIdea60Above = ageFilterData("No Idea", 60);
+  const seemsOff60Above = ageFilterData("Seems Off", 60);
+
+  // Example for another gender:
+
+  // const genderFilterData = (vote, gender) => {
+  //   return mockData.filter(
+  //     (item) => item.vote === vote && item.gender === gender
+  //   );
+  // };
+
+  // const legitDataMale = genderFilterData("Legit", "male").length;
+  // const noIdeaMale = genderFilterData("No Idea", "male").length;
+  // const seemsOffMale = genderFilterData("Seems Off", "male").length;
+
+  // const legitDataFemale = genderFilterData("Legit", "male").length;
+  // const noIdeaFemale = genderFilterData("No Idea", "male").length;
+  // const seemsOffFemale = genderFilterData("No Idea", "male").length;
+
+  // const legitDataothers = genderFilterData("others");
+  // const noIdeaothers = genderFilterData("others");
+  // const seemsOffothers = genderFilterData("others");
+
+  // Example for another politics:
+
+  // const politicsFilterData = (vote, politics) => {
+  //   return mockData.filter(
+  //     (item) => item.vote === vote && item.politics === politics
+  //   );
+  // };
+
+  // const legitDataConservative = politicsFilterData(
+  //   "Legit",
+  //   "Conservative"
+  // ).length;
+  // const noIdeaConservative = politicsFilterData(
+  //   "No Idea",
+  //   "Conservative"
+  // ).length;
+  // const seemsOffConservative = politicsFilterData(
+  //   "Seems Off",
+  //   "Conservative"
+  // ).length;
+
+  // const legitDataLiberal = politicsFilterData("Legit", "Liberal").length;
+  // const noIdeaLiberal = politicsFilterData("No Idea", "Liberal").length;
+  // const seemsOffLiberal = politicsFilterData("Seems Off", "Liberal").length;
+
+  // const legitDataVeryConservative = politicsFilterData(
+  //   "Legit",
+  //   "Very Conservative"
+  // ).length;
+  // const noIdeaVeryConservative = politicsFilterData(
+  //   "No Idea",
+  //   "Very Conservative"
+  // ).length;
+  // const seemsOffVeryConservative = politicsFilterData(
+  //   "Seems Off",
+  //   "Very Conservative"
+  // ).length;
+
+  // const legitDataVeryLiberal = politicsFilterData(
+  //   "Legit",
+  //   "Very Liberal"
+  // ).length;
+  // const noIdeaVeryLiberal = politicsFilterData(
+  //   "No Idea",
+  //   "Very Liberal"
+  // ).length;
+  // const seemsOffVeryLiberal = politicsFilterData(
+  //   "Seems Off",
+  //   "Very Liberal"
+  // ).length;
+
+  const PoliticsFilterData = (vote, politics) => {
+    return mockData.filter(
+      (item) => item.vote === vote && item.politics === politics
+    ).length;
+  };
+
+  const politicsVoteOptions = ["Legit", "No Idea", "Seems Off"];
+  const politicsOptions = [
+    "Conservative",
+    "Liberal",
+    "Very Conservative",
+    "Very Liberal",
+  ];
+
+  const politicsResult = {};
+
+  politicsVoteOptions.forEach((vote) => {
+    politicsOptions.forEach((politics) => {
+      politicsResult[`${vote}${politics}`] = PoliticsFilterData(vote, politics);
+    });
+  });
+
+  const ageBarData = [
     {
-      value: 60000,
-      // label: "18-25",
+      value: legitData1825.length,
+      label: barLabels[0],
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
       //legit
     },
     {
-      value: 25000,
+      value: noIdea1825.length,
       spacing: 2,
       frontColor: "#DFE0DF",
       //No idea
     },
-    { value: 20000, frontColor: "#757575" },
+    { value: seemsOff1825.length, frontColor: "#757575" },
     //Seems off
 
     {
-      value: 65000,
-      // label: "26-40",
+      value: legitData2640.length,
+      label: barLabels[1],
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
       //legit
     },
     {
-      value: 40000,
+      value: noIdea2640.length,
       spacing: 2,
       frontColor: "#DFE0DF",
       //No idea
     },
-    { value: 20000, frontColor: "#757575" },
+    { value: seemsOff2640.length, frontColor: "#757575" },
     //Seems off
     {
-      value: 50000,
-      // label: "41-60",
+      value: legitData4160.length,
+      label: barLabels[2],
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
       //legit
     },
     {
-      value: 75000,
+      value: noIdea4160.length,
       spacing: 2,
       frontColor: "#DFE0DF",
       //No idea
     },
-    { value: 20000, frontColor: "#757575" },
+    { value: seemsOff4160.length, frontColor: "#757575" },
     //Seems off
     {
-      value: 15000,
-      // label: "60+, y/o",
+      value: legitData60Above.length,
+      label: barLabels[3],
       spacing: 2,
       labelWidth: 60,
       frontColor: "#FA8638",
       //legit
     },
     {
-      value: 45000,
+      value: noIdea60Above.length,
       spacing: 2,
       frontColor: "#DFE0DF",
       //No idea
     },
-    { value: 30000, frontColor: "#757575" },
+    { value: seemsOff60Above.length, frontColor: "#757575" },
     //Seems off
   ];
 
-  
-  const [value, setValue] = useState(null);
-  // const [bardata, setBarData] = useState("");
+  const genderFilterData = (vote, gender) => {
+    return mockData.filter(
+      (item) => item.vote === vote && item.gender === gender
+    ).length;
+  };
 
-  // function getFilteredList() {
-  //   switch (bardata) {
-  //     case "legit":
-  //       return mockData.filter((data) => data.type===legit);
-  //     case "noIdea":
-  //       return mockData.filter((data) => data.type===noIdea);
-  //     case "seemsOff":
-  //       return mockData.filter((data) => data.type===seemsOff);
-  //   }
-  // }
+  const genderVoteOptions = ["Legit", "No Idea", "Seems Off"];
+  const genderOptions = ["Male", "Female", "Transgender", "Non-Binary"];
+
+  const genderResult = {};
+
+  genderVoteOptions.forEach((vote) => {
+    genderOptions.forEach((gender) => {
+      genderResult[`${vote}${gender}`] = genderFilterData(vote, gender);
+    });
+  });
+
+  // console.log(genderResult);
+
+  const genderBarData = [
+    {
+      value: genderResult["LegitMale"],
+      label: barLabels[0],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: genderResult["No IdeaMale"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: genderResult["Seems OffMale"], frontColor: "#757575" },
+    //Seems off
+
+    {
+      value: genderResult["LegitFemale"],
+      label: barLabels[1],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: genderResult["No IdeaFemale"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: genderResult["Seems OffFemale"], frontColor: "#757575" },
+    //Seems off
+    {
+      value: genderResult["LegitTransgender"],
+      label: barLabels[2],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: genderResult["No IdeaTransgender"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: genderResult["Seems OffTransgender"], frontColor: "#757575" },
+    //Seems off
+    {
+      value: genderResult["LegitNon-Binary"],
+      label: barLabels[3],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: genderResult["No IdeaNon-Binary"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: genderResult["Seems OffNon-Binary"], frontColor: "#757575" },
+    //Seems off
+  ];
+
+  const politicsBarData = [
+    {
+      value: politicsResult["LegitLiberal"],
+      label: barLabels[0],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: politicsResult["No IdeaLiberal"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: politicsResult["Seems OffLiberal"], frontColor: "#757575" },
+    //Seems off
+
+    {
+      value: politicsResult["LegitConservative"],
+      label: barLabels[1],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: politicsResult["No IdeaConservative"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: politicsResult["Seems OffConservative"], frontColor: "#757575" },
+    //Seems off
+    {
+      value: politicsResult["LegitVery Conservative"],
+      label: barLabels[2],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: politicsResult["No IdeaVery Conservative"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: politicsResult["Seems OffVery Conservative"],
+      frontColor: "#757575",
+    },
+    //Seems off
+    {
+      value: politicsResult["LegitVery Liberal"],
+      label: barLabels[3],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: politicsResult["No IdeaVery Liberal"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: politicsResult["Seems OffVery Liberal"],
+      frontColor: "#757575",
+    },
+    //Seems off
+  ];
+
+  const raceFilterData = (vote, race) => {
+    return mockData.filter((item) => item.vote === vote && item.race === race)
+      .length;
+  };
+
+  const raceVoteOptions = ["Legit", "No Idea", "Seems Off"];
+  const raceOptions = [
+    "White",
+    "black/African American",
+    "Asian",
+    "American Indian/Alaska Native",
+    "Native Hawaiian & Other Pacific islanders",
+    "Hispanic or Latino",
+    "Two or more races",
+  ];
+
+  const raceResult = {};
+
+  raceVoteOptions.forEach((vote) => {
+    raceOptions.forEach((race) => {
+      raceResult[`${vote}${race}`] = raceFilterData(vote, race);
+    });
+  });
+
+  // console.log(raceResult);
+
+  const raceBarData = [
+    {
+      value: raceResult["LegitWhite"],
+      label: barLabels[0],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No IdeaWhite"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: raceResult["Seems OffWhite"], frontColor: "#757575" },
+    //Seems off
+
+    {
+      value: raceResult["Legitblack/African American"],
+      label: barLabels[1],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No Ideablack/African American"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: raceResult["Seems Offblack/African American"],
+      frontColor: "#757575",
+    },
+    //Seems off
+    {
+      value: raceResult["LegitAsian"],
+      label: barLabels[2],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No IdeaAsian"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    { value: raceResult["Seems OffAsian"], frontColor: "#757575" },
+    //Seems off
+    {
+      value: raceResult["LegitAmerican Indian/Alaska Native"],
+      label: barLabels[3],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No IdeaAmerican Indian/Alaska Native"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: raceResult["Seems OffAmerican Indian/Alaska Native"],
+      frontColor: "#757575",
+    },
+    //Seems off
+    {
+      value: raceResult["LegitNative Hawaiian & Other Pacific islanders"],
+      label: barLabels[4],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No IdeaNative Hawaiian & Other Pacific islanders"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: raceResult["Seems OffNative Hawaiian & Other Pacific islanders"],
+      frontColor: "#757575",
+    },
+    //Seems off
+    {
+      value: raceResult["LegitHispanic or Latino"],
+      label: barLabels[5],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No IdeaHispanic or Latino"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: raceResult["Seems OffHispanic or Latino"],
+      frontColor: "#757575",
+    },
+    //Seems off
+    {
+      value: raceResult["LegitTwo or more races"],
+      label: barLabels[6],
+      spacing: 2,
+      labelWidth: 50,
+      frontColor: "#FA8638",
+      //legit
+    },
+    {
+      value: raceResult["No IdeaTwo or more races"],
+      spacing: 2,
+      frontColor: "#DFE0DF",
+      //No idea
+    },
+    {
+      value: raceResult["Seems OffTwo or more races"],
+      frontColor: "#757575",
+    },
+    //Seems off
+  ];
+
+  const handleDropdownChange = (selectedValue) => {
+    setValue(selectedValue);
+    setSelectedDropdownValue(selectedValue);
+    // adjust bar chart labels based on selected dropdown value
+    switch (selectedValue) {
+      case "1":
+        setBarLabels(["18-25", "26-40", "41-60", "60+, y/o"]);
+        break;
+      case "2":
+        setBarLabels(["Male", "Female", "Transgender", "Non-binary"]);
+        break;
+      case "3":
+        setBarLabels([
+          "Liberal",
+          "Conservative",
+          "Very Conservative",
+          "Very Liberal",
+        ]);
+        break;
+      case "4":
+        setBarLabels([
+          "White",
+          "Black",
+          "Asian",
+          "American Indian",
+          "Native Hawaiian ",
+          "Hispanic",
+          "Two or more races",
+        ]);
+        break;
+      default:
+        setBarLabels(["18-25", "26-40", "41-60", "60+ y/o"]);
+        break;
+    }
+  };
+
+  let barData = [];
+
+  switch (selectedDropdownValue) {
+    case "1":
+      barData = ageBarData;
+      break;
+    case "2":
+      barData = genderBarData;
+      break;
+    case "3":
+      barData = politicsBarData;
+      break;
+    case "4":
+      barData = raceBarData;
+      break;
+    default:
+      barData = ageBarData;
+      break;
+  }
+
+  // console.log(barLabels);
 
   return (
-    <View style={styles.barChartContainer}>
+    <View style={[styles.barChartContainer, { backgroundColor: colorScheme === 'dark' ? '#000000' : '#ffffff' }]}>
       <View style={styles.chartHeading}>
-        <Text style={styles.heading}>Details</Text>
-        <View style={styles.dropdownContainer} >
-        <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        search
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder="Age"
-        searchPlaceholder="Search..."
-        value={value}
-        onChange={item => {
-          setValue(item.value);
-        }}
-       overlayStyle={{ backgroundColor: "transparent" }} 
-      />
+        <Text style={[styles.heading, { color: colorScheme === 'dark' ? '#ffffff' : '#222222' }]}>Details</Text>
+        <View style={styles.dropdownContainer}>
+          <Dropdown
+            style={[styles.dropdown, { borderColor: colorScheme === 'dark' ? '#ffffff' : '#FA8638' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="Age"
+            searchPlaceholder="Search..."
+            value={value}
+            onChange={(item) => handleDropdownChange(item.value)}
+            overlayStyle={{ backgroundColor: "transparent" }}
+          />
         </View>
       </View>
       <BarChart
@@ -132,16 +618,10 @@ export function BarGraph() {
         hideRules
         xAxisThickness={0}
         yAxisThickness={0}
-        yAxisTextStyle={{ color: "gray" }}
+        yAxisTextStyle={{ color: colorScheme === 'dark' ? '#ffffff' : 'gray' }}
         noOfSections={4}
-        maxValue={100000}
+        maxValue={1000}
       />
-      <View style={styles.labels}>
-        <Text>18-25</Text>
-      <Text>26-40</Text>
-      <Text>41-60</Text>
-      <Text>60+, y/o</Text>
-      </View>
       <View style={styles.chartBottomLabels}>
         <Text style={{ color: "#FA8638", fontSize: 50 }}>.</Text>
         <Text style={{ fontSize: 10 }}>Legit</Text>
@@ -150,13 +630,12 @@ export function BarGraph() {
         <Text style={{ color: "#757575", fontSize: 50 }}>.</Text>
         <Text style={{ fontSize: 10 }}>Seems off</Text>
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Discover New Posts</Text>
+      <TouchableOpacity style={[styles.button, { borderColor: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>
+        <Text style={[styles.buttonText, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>Discover New Posts</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
 
 
 const styles = StyleSheet.create({
@@ -179,11 +658,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
-  labels:{
-    width:300,
-    flexDirection:"row",
-    justifyContent:"space-around",
-    marginLeft:70,
+  labels: {
+    width: 300,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginLeft: 70,
   },
   chartBottomLabels: {
     width: 200,
@@ -204,32 +683,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
-  dropdownContainer:{
-    width:120
-    
+  dropdownContainer: {
+    width: 120,
   },
   dropdown: {
     borderColor: "#FA8638",
     borderWidth: 2,
-    borderRadius:10,
-    padding:5,
+    borderRadius: 10,
+    padding: 5,
   },
   icon: {
     marginRight: 5,
   },
   placeholderStyle: {
     fontSize: 12,
-    fontWeight:700,
+    fontWeight: 700,
   },
   selectedTextStyle: {
     fontSize: 12,
-    fontWeight:700,
+    fontWeight: 700,
   },
   iconStyle: {
     width: 20,
     height: 20,
   },
   inputSearchStyle: {
-    display:"none",
+    display: "none",
   },
 });

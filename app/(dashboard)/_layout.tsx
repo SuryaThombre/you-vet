@@ -64,7 +64,12 @@ function RootLayoutNav() {
           headerTitle: () => (
             <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
             <Pressable onPress={() => navigation.goBack()} >
-            <AntDesign name="arrowleft" size={20} color="black" />
+            <AntDesign
+    name="arrowleft"
+    size={24}
+    color={colorScheme === 'dark' ? '#fff' : '#000'}
+
+  />
           </Pressable>
           <Text style={{flex:1, fontWeight: '600', fontSize: 24, textAlign: 'center', paddingRight:70 }}>Overview</Text>
           </View>

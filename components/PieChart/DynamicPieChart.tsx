@@ -1,6 +1,6 @@
-// @ts-nocheck - may need to be at the start of file
+// @ts-nocheck
 import React, { useEffect } from "react";
-import { FlatList, View, StyleSheet, Text } from "react-native";
+import { FlatList, View, StyleSheet, Text, useColorScheme } from "react-native";
 import PieChart from "react-native-pie-chart";
 import Data from "../../Mock_Data/MOCK_DATA.json";
 import { useState } from "react";
@@ -9,6 +9,7 @@ export default function App() {
   const [legitCount, setLegitCount] = useState(0);
   const [seemsOffCount, setSeemsOffCount] = useState(0);
   const [noIdeasCount, setNoIdeasCount] = useState(0);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     // Initialize counts for each vote value
@@ -69,8 +70,8 @@ export default function App() {
   const RenderListItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <View style={[styles.colorIndicator, { backgroundColor: item.color }]} />
-      <Text style={styles.key}>{item.key}</Text>
-      <Text style={styles.count}>{item.count}</Text>
+      <Text style={[styles.key, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>{item.key}</Text>
+      <Text style={[styles.count, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>{item.count}</Text>
       <Text style={styles.percent}>({item.percentage}%)</Text>
     </View>
   );
@@ -79,11 +80,11 @@ export default function App() {
     <View style={styles.container}>
       <PieChart
         style={styles.pieChart}
-        widthAndHeight={70}
+        widthAndHeight={90}
         series={calculateSeries()}
         sliceColor={["#FA8638", "#757575", "#DFE0DF"]}
         coverRadius={0.85}
-        coverFill={"#FFF"}
+        coverFill={colorScheme === 'dark' ? '#000000' : '#FFF'}
         innerRadius={100}
       />
       <FlatList
@@ -111,14 +112,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   colorIndicator: {
-    marginTop:2,
+    marginTop: 2,
     width: 12,
     height: 12,
     borderRadius: 8,
     marginRight: 6,
   },
   key: {
-    width:80,
+    width: 80,
     fontSize: 12,
     marginLeft: 6,
     fontWeight: "500",

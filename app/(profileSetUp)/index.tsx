@@ -1,34 +1,32 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
-
 const ProfileSetup = () => {
   const [userName, setUserName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [errors, setErrors] = useState({});
   const navigation = useNavigation();
-
-  const handleNext = () => {
-    const errors = validateInputs();
-    if (Object.keys(errors).length === 0) {
-      // Handle the next step after profile setup
-      console.log('Username:', userName);
-      console.log('Birth Date:', birthDate);
-      // Navigate to the next screen
-      navigation.navigate('profileSetUp'); // Change 'ProfileSetUp' to the desired screen name
-    } else {
-      setErrors(errors);
-    }
-  };
-
+  const colorScheme = useColorScheme();
+const handleNext = () => {
+  const errors = validateInputs();
+  if (Object.keys(errors).length === 0) {
+    // Reset errors when inputs are valid
+    setErrors({});
+    // Handle the next step after profile setup
+    console.log('Username:', userName);
+    console.log('Birth Date:', birthDate);
+    // Navigate to the next screen
+    navigation.navigate('profileSetUp'); // Change 'ProfileSetUp' to the desired screen name
+  } else {
+    setErrors(errors);
+  }
+};
   const validateInputs = () => {
     const errors = {};
-
     if (!userName) {
       errors.userName = 'Username is required';
     }
-
     if (!birthDate) {
       errors.birthDate = 'Birth date is required';
     } else {
@@ -54,94 +52,122 @@ const ProfileSetup = () => {
         }
       }
     }
-
     return errors;
   };
-
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, colorScheme === 'dark' && styles.containerDark]}>
       <View>
-        <Text style={styles.subtitle}>Type your user name and birth date.</Text>
-        <Text style={styles.subtitle}>Only user name will be visible for others.</Text>
+        <Text style={[styles.subtitle, colorScheme === 'dark' && styles.subtitleDark]}>
+          Type your user name and birth date.
+        </Text>
+        <Text style={[styles.subtitle, colorScheme === 'dark' && styles.subtitleDark]}>
+          Only user name will be visible for others.
+        </Text>
+        <Text style={[styles.inputLabel, colorScheme === 'dark' && styles.inputLabelDark]}>User Name</Text>
 
         <TextInput
-          style={[styles.input, errors.userName && styles.inputError]}
+          style={[styles.input, errors.userName && styles.inputError, colorScheme === 'dark' && styles.inputDark]}
           value={userName}
           onChangeText={setUserName}
           placeholder="User Name"
+          placeholderTextColor={colorScheme === 'dark' ? '#fff' : '#000'}
         />
         {errors.userName && <Text style={styles.errorText}>{errors.userName}</Text>}
+        <Text style={[styles.inputLabel, colorScheme === 'dark' && styles.inputLabelDark]}>Birth date</Text>
 
         <TextInput
-          style={[styles.input, errors.birthDate && styles.inputError]}
+          style={[styles.input, errors.birthDate && styles.inputError, colorScheme === 'dark' && styles.inputDark]}
           value={birthDate}
           onChangeText={setBirthDate}
-          placeholder="Birth date (MM/DD/YYYY)"
+          placeholder="MM/DD/YYYY"
           keyboardType="numbers-and-punctuation"
+          placeholderTextColor={colorScheme === 'dark' ? '#fff' : '#000'}
         />
         {errors.birthDate && <Text style={styles.errorText}>{errors.birthDate}</Text>}
       </View>
       <View style={styles.NextButtonStyle}>
-        <TouchableOpacity style={styles.button} onPress={handleNext}>
-        <Text style={styles.buttonText}>Next</Text>
-        <AntDesign name="arrowright" size={20} color="white" />
-      </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, colorScheme === 'dark' && styles.buttonDark]} onPress={handleNext}>
+          <Text style={[styles.buttonText, colorScheme === 'dark' && styles.buttonTextDark]}>Next</Text>
+          <AntDesign name="arrowright" size={20} color="white" />
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent : 'space-between',
+    justifyContent: 'space-between',
     padding: 16,
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+  containerDark: {
+    backgroundColor: '#000',
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 8,
+    color: '#000',
+  },
+  subtitleDark: {
+    color: '#fff',
+  },
+  inputLabel: {
+    padding: 5,
+    marginLeft: 10,
+    fontWeight: '800',
+    fontSize: 14,
+    color: '#000', // Default color for light mode
+  },
+  inputLabelDark: {
+    color: '#fff', // Color for dark mode
   },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 5,
     paddingHorizontal: 8,
-    borderRadius : 50
+    borderRadius: 50,
+    color: '#000',
+  },
+  inputDark: {
+    borderColor: '#fff',
+    color: '#fff',
   },
   inputError: {
     borderColor: 'red',
   },
   errorText: {
-    color: 'red',
+    color: '#EC254E',
     marginBottom: 8,
+    marginLeft: 10,
   },
-  NextButtonStyle : {
-    flex : 1,
-    justifyContent : "flex-end",
-    alignItems : "flex-end",
+  NextButtonStyle: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   button: {
-    width : "30%",
-    backgroundColor: '#ff7f50',
+    width: '30%',
+    backgroundColor: '#FF7F50',
     paddingVertical: 12,
     borderRadius: 50,
-    flexDirection : "row",
-    justifyContent : "center",
-    alignItems : "center"
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonDark: {
+    backgroundColor: '#333', // Dark mode button color
   },
   buttonText: {
-    paddingRight : 5,
+    paddingRight: 5,
     color: '#fff',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize : 18
+    fontSize: 18,
+  },
+  buttonTextDark: {
+    color: '#fff', // Dark mode button text color
   },
 });
 
