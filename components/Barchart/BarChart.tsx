@@ -1,10 +1,16 @@
 // @ts-nocheck - may need to be at the start of file
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, useColorScheme } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import { Dropdown } from "react-native-element-dropdown";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import mockData from "../../Mock_Data/MOCK_DATA.json";
+import { useUserProfile } from "@/providers/profileSetUpProvider";
 
 //array for labels bwlow the bar graph
 const data = [
@@ -23,105 +29,68 @@ export function BarGraph() {
     "60+, y/o",
   ]);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState("1");
+  const [selectedCityArr, setSelectedCityArr] = useState([]);
   const colorScheme = useColorScheme();
   //functions for filter the bar graph data
+  const { city } = useUserProfile()
+  console.log(city, "city");
+  
+  //function for filter age data
 
-  const ageFilterData = (vote, minAge, maxAge = Infinity) => {
+  const ageFilterData = (city, vote, minAge, maxAge = Infinity) => {
     return mockData.filter(
-      (item) => item.vote === vote && item.age >= minAge && item.age <= maxAge
+      (item) =>
+        item.city_name === city &&
+        item.vote === vote &&
+        item.age >= minAge &&
+        item.age <= maxAge
     );
   };
 
-  const legitData1825 = ageFilterData("Legit", 18, 25);
-  const noIdea1825 = ageFilterData("No Idea", 18, 25);
-  const seemsOff1825 = ageFilterData("Seems Off", 18, 25);
+  const legitData1825 = ageFilterData(city, "Legit", 18, 25);
+  const noIdea1825 = ageFilterData(city, "No Idea", 18, 25);
+  const seemsOff1825 = ageFilterData(city, "Seems Off", 18, 25);
 
-  const legitData2640 = ageFilterData("Legit", 26, 40);
-  const noIdea2640 = ageFilterData("No Idea", 26, 40);
-  const seemsOff2640 = ageFilterData("Seems Off", 26, 40);
+  const legitData2640 = ageFilterData(city, "Legit", 26, 40);
+  const noIdea2640 = ageFilterData(city, "No Idea", 26, 40);
+  const seemsOff2640 = ageFilterData(city, "Seems Off", 26, 40);
 
-  const legitData4160 = ageFilterData("Legit", 41, 60);
-  const noIdea4160 = ageFilterData("No Idea", 41, 60);
-  const seemsOff4160 = ageFilterData("Seems Off", 41, 60);
+  const legitData4160 = ageFilterData(city, "Legit", 41, 60);
+  const noIdea4160 = ageFilterData(city, "No Idea", 41, 60);
+  const seemsOff4160 = ageFilterData(city, "Seems Off", 41, 60);
 
-  const legitData60Above = ageFilterData("Legit", 60);
-  const noIdea60Above = ageFilterData("No Idea", 60);
-  const seemsOff60Above = ageFilterData("Seems Off", 60);
+  const legitData60Above = ageFilterData(city, "Legit", 60);
+  const noIdea60Above = ageFilterData(city, "No Idea", 60);
+  const seemsOff60Above = ageFilterData(city, "Seems Off", 60);
 
-  // Example for another gender:
+  //function for filter gender data
 
-  // const genderFilterData = (vote, gender) => {
-  //   return mockData.filter(
-  //     (item) => item.vote === vote && item.gender === gender
-  //   );
-  // };
-
-  // const legitDataMale = genderFilterData("Legit", "male").length;
-  // const noIdeaMale = genderFilterData("No Idea", "male").length;
-  // const seemsOffMale = genderFilterData("Seems Off", "male").length;
-
-  // const legitDataFemale = genderFilterData("Legit", "male").length;
-  // const noIdeaFemale = genderFilterData("No Idea", "male").length;
-  // const seemsOffFemale = genderFilterData("No Idea", "male").length;
-
-  // const legitDataothers = genderFilterData("others");
-  // const noIdeaothers = genderFilterData("others");
-  // const seemsOffothers = genderFilterData("others");
-
-  // Example for another politics:
-
-  // const politicsFilterData = (vote, politics) => {
-  //   return mockData.filter(
-  //     (item) => item.vote === vote && item.politics === politics
-  //   );
-  // };
-
-  // const legitDataConservative = politicsFilterData(
-  //   "Legit",
-  //   "Conservative"
-  // ).length;
-  // const noIdeaConservative = politicsFilterData(
-  //   "No Idea",
-  //   "Conservative"
-  // ).length;
-  // const seemsOffConservative = politicsFilterData(
-  //   "Seems Off",
-  //   "Conservative"
-  // ).length;
-
-  // const legitDataLiberal = politicsFilterData("Legit", "Liberal").length;
-  // const noIdeaLiberal = politicsFilterData("No Idea", "Liberal").length;
-  // const seemsOffLiberal = politicsFilterData("Seems Off", "Liberal").length;
-
-  // const legitDataVeryConservative = politicsFilterData(
-  //   "Legit",
-  //   "Very Conservative"
-  // ).length;
-  // const noIdeaVeryConservative = politicsFilterData(
-  //   "No Idea",
-  //   "Very Conservative"
-  // ).length;
-  // const seemsOffVeryConservative = politicsFilterData(
-  //   "Seems Off",
-  //   "Very Conservative"
-  // ).length;
-
-  // const legitDataVeryLiberal = politicsFilterData(
-  //   "Legit",
-  //   "Very Liberal"
-  // ).length;
-  // const noIdeaVeryLiberal = politicsFilterData(
-  //   "No Idea",
-  //   "Very Liberal"
-  // ).length;
-  // const seemsOffVeryLiberal = politicsFilterData(
-  //   "Seems Off",
-  //   "Very Liberal"
-  // ).length;
-
-  const PoliticsFilterData = (vote, politics) => {
+  const genderFilterData = (city, vote, gender) => {
     return mockData.filter(
-      (item) => item.vote === vote && item.politics === politics
+      (item) =>
+        item.city_name === city && item.vote === vote && item.gender === gender
+    ).length;
+  };
+
+  const genderVoteOptions = ["Legit", "No Idea", "Seems Off"];
+  const genderOptions = ["Male", "Female", "Transgender", "Non-Binary"];
+
+  const genderResult = {};
+
+  genderVoteOptions.forEach((vote) => {
+    genderOptions.forEach((gender) => {
+      genderResult[`${vote}${gender}`] = genderFilterData(city, vote, gender);
+    });
+  });
+
+  //function for filter politics data
+
+  const politicsFilterData = (city, vote, politics) => {
+    return mockData.filter(
+      (item) =>
+        item.city_name === city &&
+        item.vote === vote &&
+        item.politics === politics
     ).length;
   };
 
@@ -137,10 +106,47 @@ export function BarGraph() {
 
   politicsVoteOptions.forEach((vote) => {
     politicsOptions.forEach((politics) => {
-      politicsResult[`${vote}${politics}`] = PoliticsFilterData(vote, politics);
+      politicsResult[`${vote}${politics}`] = politicsFilterData(
+        city,
+        vote,
+        politics
+      );
     });
   });
 
+  // console.log("result", politicsResult, city);
+
+  //function for filter race data
+
+  const raceFilterData = (city, vote, race) => {
+    return mockData.filter(
+      (item) =>
+        item.city_name === city && item.vote === vote && item.race === race
+    ).length;
+  };
+
+  const raceVoteOptions = ["Legit", "No Idea", "Seems Off"];
+  const raceOptions = [
+    "White",
+    "black/African American",
+    "Asian",
+    "American Indian/Alaska Native",
+    "Native Hawaiian & Other Pacific islanders",
+    "Hispanic or Latino",
+    "Two or more races",
+  ];
+
+  const raceResult = {};
+
+  raceVoteOptions.forEach((vote) => {
+    raceOptions.forEach((race) => {
+      raceResult[`${vote}${race}`] = raceFilterData(city, vote, race);
+    });
+  });
+
+  // console.log("result", raceResult, city);
+
+  //bar chart data's
   const ageBarData = [
     {
       value: legitData1825.length,
@@ -148,6 +154,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -165,6 +172,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -181,6 +189,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -197,6 +206,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 60,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -209,25 +219,6 @@ export function BarGraph() {
     //Seems off
   ];
 
-  const genderFilterData = (vote, gender) => {
-    return mockData.filter(
-      (item) => item.vote === vote && item.gender === gender
-    ).length;
-  };
-
-  const genderVoteOptions = ["Legit", "No Idea", "Seems Off"];
-  const genderOptions = ["Male", "Female", "Transgender", "Non-Binary"];
-
-  const genderResult = {};
-
-  genderVoteOptions.forEach((vote) => {
-    genderOptions.forEach((gender) => {
-      genderResult[`${vote}${gender}`] = genderFilterData(vote, gender);
-    });
-  });
-
-  // console.log(genderResult);
-
   const genderBarData = [
     {
       value: genderResult["LegitMale"],
@@ -235,6 +226,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -252,6 +244,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -268,6 +261,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -284,6 +278,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -303,6 +298,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -320,6 +316,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -336,6 +333,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -355,6 +353,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -370,32 +369,6 @@ export function BarGraph() {
     //Seems off
   ];
 
-  const raceFilterData = (vote, race) => {
-    return mockData.filter((item) => item.vote === vote && item.race === race)
-      .length;
-  };
-
-  const raceVoteOptions = ["Legit", "No Idea", "Seems Off"];
-  const raceOptions = [
-    "White",
-    "black/African American",
-    "Asian",
-    "American Indian/Alaska Native",
-    "Native Hawaiian & Other Pacific islanders",
-    "Hispanic or Latino",
-    "Two or more races",
-  ];
-
-  const raceResult = {};
-
-  raceVoteOptions.forEach((vote) => {
-    raceOptions.forEach((race) => {
-      raceResult[`${vote}${race}`] = raceFilterData(vote, race);
-    });
-  });
-
-  // console.log(raceResult);
-
   const raceBarData = [
     {
       value: raceResult["LegitWhite"],
@@ -403,6 +376,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -420,6 +394,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -439,6 +414,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -455,6 +431,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -474,6 +451,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -493,6 +471,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -512,6 +491,7 @@ export function BarGraph() {
       spacing: 2,
       labelWidth: 50,
       frontColor: "#FA8638",
+      labelTextStyle: { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
       //legit
     },
     {
@@ -527,9 +507,23 @@ export function BarGraph() {
     //Seems off
   ];
 
+  // Function to filter data by city
+  function filterDataByCity(selectedCity) {
+    return mockData.filter((item) => item.city_name === selectedCity);
+  }
+
+  function renderSelectedCityData(selectedCity) {
+    const selectedCityData1 = filterDataByCity(selectedCity);
+  }
+
+  const selectedCity = city;
+
+  renderSelectedCityData(selectedCity);
+
   const handleDropdownChange = (selectedValue) => {
     setValue(selectedValue);
     setSelectedDropdownValue(selectedValue);
+
     // adjust bar chart labels based on selected dropdown value
     switch (selectedValue) {
       case "1":
@@ -555,6 +549,18 @@ export function BarGraph() {
           "Native Hawaiian ",
           "Hispanic",
           "Two or more races",
+        ]);
+        break;
+      case "5":
+        setBarLabels([
+          "New York",
+          "Los Angeles",
+          "San Diego",
+          "Philadelphia",
+          "Chicago",
+          "Houston",
+          "Phoenix",
+          "San Antonio",
         ]);
         break;
       default:
@@ -583,19 +589,44 @@ export function BarGraph() {
       break;
   }
 
-  // console.log(barLabels);
-
   return (
-    <View style={[styles.barChartContainer, { backgroundColor: colorScheme === 'dark' ? '#000000' : '#ffffff' }]}>
+    <View
+      style={[
+        styles.barChartContainer,
+        { backgroundColor: colorScheme === "dark" ? "#121212" : "#ffffff" },
+      ]}
+    >
       <View style={styles.chartHeading}>
-        <Text style={[styles.heading, { color: colorScheme === 'dark' ? '#ffffff' : '#222222' }]}>Details</Text>
+        <Text
+          style={[
+            styles.heading,
+            { color: colorScheme === "dark" ? "#ffffff" : "#222222" },
+          ]}
+        >
+          Details
+        </Text>
         <View style={styles.dropdownContainer}>
           <Dropdown
-            style={[styles.dropdown, { borderColor: colorScheme === 'dark' ? '#ffffff' : '#FA8638' }]}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            iconStyle={styles.iconStyle}
+            style={[
+              styles.dropdown,
+              { borderColor: colorScheme === "dark" ? "#ffffff" : "#FA8638" },
+            ]}
+            placeholderStyle={[
+              styles.placeholderStyle,
+              { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
+            ]}
+            selectedTextStyle={[
+              styles.selectedTextStyle,
+              { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
+            ]}
+            inputSearchStyle={[
+              styles.inputSearchStyle,
+              { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
+            ]}
+            iconStyle={[
+              styles.iconStyle,
+              { tintColor: colorScheme === "dark" ? "#ffffff" : "#000000" },
+            ]}
             data={data}
             search
             maxHeight={300}
@@ -605,7 +636,9 @@ export function BarGraph() {
             searchPlaceholder="Search..."
             value={value}
             onChange={(item) => handleDropdownChange(item.value)}
-            overlayStyle={{ backgroundColor: "transparent" }}
+            overlayStyle={{
+              backgroundColor: colorScheme === "dark" ? "#000000" : "#A9A9A9",
+            }}
           />
         </View>
       </View>
@@ -618,25 +651,73 @@ export function BarGraph() {
         hideRules
         xAxisThickness={0}
         yAxisThickness={0}
-        yAxisTextStyle={{ color: colorScheme === 'dark' ? '#ffffff' : 'gray' }}
+        yAxisTextStyle={{
+          color: colorScheme === "dark" ? "#ffffff" : "#808080",
+        }}
         noOfSections={4}
-        maxValue={1000}
+        maxValue={100}
+        barColor={(index) => {
+          const colorSchemeDark = colorScheme === "dark";
+          switch (index % 3) {
+            case 0:
+              return colorSchemeDark ? "#FA8638" : "#FFA07A";
+            case 1:
+              return colorSchemeDark ? "#DFE0DF" : "#D3D3D3";
+            case 2:
+              return colorSchemeDark ? "#757575" : "#A9A9A9";
+            default:
+              return "#FA8638";
+          }
+        }}
       />
+
       <View style={styles.chartBottomLabels}>
         <Text style={{ color: "#FA8638", fontSize: 50 }}>.</Text>
-        <Text style={{ fontSize: 10 }}>Legit</Text>
+        <Text
+          style={{
+            color: colorScheme === "dark" ? "#ffffff" : "#000000",
+            fontSize: 10,
+          }}
+        >
+          Legit
+        </Text>
         <Text style={{ color: "#DFE0DF", fontSize: 50 }}>.</Text>
-        <Text style={{ fontSize: 10 }}>No idea</Text>
+        <Text
+          style={{
+            color: colorScheme === "dark" ? "#ffffff" : "#000000",
+            fontSize: 10,
+          }}
+        >
+          No idea
+        </Text>
         <Text style={{ color: "#757575", fontSize: 50 }}>.</Text>
-        <Text style={{ fontSize: 10 }}>Seems off</Text>
+        <Text
+          style={{
+            color: colorScheme === "dark" ? "#ffffff" : "#000000",
+            fontSize: 10,
+          }}
+        >
+          Seems off
+        </Text>
       </View>
-      <TouchableOpacity style={[styles.button, { borderColor: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>
-        <Text style={[styles.buttonText, { color: colorScheme === 'dark' ? '#ffffff' : '#000000' }]}>Discover New Posts</Text>
+      <TouchableOpacity
+        style={[
+          styles.button,
+          { borderColor: colorScheme === "dark" ? "#ffffff" : "#000000" },
+        ]}
+      >
+        <Text
+          style={[
+            styles.buttonText,
+            { color: colorScheme === "dark" ? "#ffffff" : "#000000" },
+          ]}
+        >
+          Discover New Posts
+        </Text>
       </TouchableOpacity>
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   barChartContainer: {

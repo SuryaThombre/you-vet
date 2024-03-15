@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { AntDesign } from '@expo/vector-icons';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  useColorScheme,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { useUserProfile } from "@/providers/profileSetUpProvider";
+
 const ProfileSetup = () => {
   const [userName, setUserName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [errors, setErrors] = useState({});
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
+  const { userProfile, updateUserProfile } = useUserProfile()
 const handleNext = () => {
   const errors = validateInputs();
   if (Object.keys(errors).length === 0) {
     // Reset errors when inputs are valid
     setErrors({});
     // Handle the next step after profile setup
-    console.log('Username:', userName);
-    console.log('Birth Date:', birthDate);
+    
+    updateUserProfile("userName", userName);
+    updateUserProfile("birthDate", birthDate);
+    console.log(userProfile);
+    
     // Navigate to the next screen
     navigation.navigate('profileSetUp'); // Change 'ProfileSetUp' to the desired screen name
   } else {
@@ -41,7 +55,10 @@ const handleNext = () => {
           const currentDate = new Date();
           let age = currentDate.getFullYear() - birthDateObj.getFullYear();
           const monthDiff = currentDate.getMonth() - birthDateObj.getMonth();
-          if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDateObj.getDate())) {
+          if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && currentDate.getDate() < birthDateObj.getDate())
+          ) {
             age--;
           }
           if (age < 18) {
@@ -83,7 +100,9 @@ const handleNext = () => {
           keyboardType="numbers-and-punctuation"
           placeholderTextColor={colorScheme === 'dark' ? '#fff' : '#000'}
         />
-        {errors.birthDate && <Text style={styles.errorText}>{errors.birthDate}</Text>}
+        {errors.birthDate && (
+          <Text style={styles.errorText}>{errors.birthDate}</Text>
+        )}
       </View>
       <View style={styles.NextButtonStyle}>
         <TouchableOpacity style={[styles.button, colorScheme === 'dark' && styles.buttonDark]} onPress={handleNext}>
@@ -99,7 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   containerDark: {
     backgroundColor: '#000',
@@ -124,7 +143,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 5,
     paddingHorizontal: 8,
@@ -136,38 +155,33 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   inputError: {
-    borderColor: 'red',
+    borderColor: "red",
   },
   errorText: {
-    color: '#EC254E',
+    color: "red",
     marginBottom: 8,
     marginLeft: 10,
   },
   NextButtonStyle: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   button: {
-    width: '30%',
-    backgroundColor: '#FF7F50',
+    width: "30%",
+    backgroundColor: "#ff7f50",
     paddingVertical: 12,
     borderRadius: 50,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonDark: {
-    backgroundColor: '#333', // Dark mode button color
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonText: {
     paddingRight: 5,
-    color: '#fff',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
     fontSize: 18,
-  },
-  buttonTextDark: {
-    color: '#fff', // Dark mode button text color
   },
 });
 

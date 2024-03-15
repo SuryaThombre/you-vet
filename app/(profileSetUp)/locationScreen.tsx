@@ -17,22 +17,24 @@ import { useNavigation } from "@react-navigation/native";
 
 import LocationImage from "../../assets/images/LocationImage.png";
 
-const LocationScreen = () => {
+const LocationScree = () => {
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
 
-  const [locationPermissionInformation, requestPermission] =
-    useForegroundPermissions();
+  const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
 
   async function verifyPermissions() {
     if (
       locationPermissionInformation.status === PermissionStatus.UNDETERMINED
     ) {
       const permissionResponse = await requestPermission();
+      console.log( "granted",permissionResponse.granted);
       return permissionResponse.granted;
     }
 
     if (locationPermissionInformation.status === PermissionStatus.DENIED) {
+      console.log("denied");
+      
       Alert.alert(
         "Insufficient Permissions!",
         "You need to grant location permissions to use this app."
@@ -43,21 +45,28 @@ const LocationScreen = () => {
   }
 
   async function getLocationHandler() {
-    const hasPermission = await verifyPermissions();
-    if (!hasPermission) {
-      return;
-    }
-
-    const location = await getCurrentPositionAsync();
-    if (location) {
-      navigation.navigate("(dashboard)"); // Navigate to the Dashboard screen
-    } else {
-      console.log("Error getting location");
+    try {
+      const hasPermission = await verifyPermissions();
+      if(!hasPermission) {
+        return;
+      }
+      try {
+        navigation.navigate("(dashboard)"); // Navigate to the Dashboard screen
+        const location = await getCurrentPositionAsync();
+        console.log(location);
+        
+      } catch (error) {
+        console.log("===>", error);
+        navigation.navigate("locationScreen"); // Navigate to the Location Screen
+        
+      }
+    } catch (error) {
+      console.log("error", error);
     }
   }
 
   return (
-    <View style={[styles.mainContainer, { backgroundColor: colorScheme === 'dark' ? '#000000' : '#ffffff' }]}>
+    <View style={[styles.mainContainer, { backgroundColor: colorScheme === 'dark' ? '#151515' : '#ffffff' }]}>
       <View style={styles.locationContainer}>
         <Image style={styles.imageLocation} source={LocationImage} />
         <Text style={[styles.headingText, { color: colorScheme === 'dark' ? '#ffffff' : '#222222' }]}>Enable Your Location</Text>
@@ -75,7 +84,7 @@ const LocationScreen = () => {
   );
 };
 
-export default LocationScreen;
+export default LocationScree;
 
 const styles = StyleSheet.create({
   mainContainer: {

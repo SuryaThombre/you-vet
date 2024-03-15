@@ -77,14 +77,14 @@ export default function App() {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: colorScheme === 'dark' ? '#151515' : '#ffffff'}}>
       <PieChart
         style={styles.pieChart}
         widthAndHeight={90}
         series={calculateSeries()}
         sliceColor={["#FA8638", "#757575", "#DFE0DF"]}
         coverRadius={0.85}
-        coverFill={colorScheme === 'dark' ? '#000000' : '#FFF'}
+        coverFill={colorScheme === 'dark' ? '#151515' : '#ffffff'}
         innerRadius={100}
       />
       <FlatList

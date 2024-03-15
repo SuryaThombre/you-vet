@@ -57,12 +57,12 @@ function RootLayoutNav() {
   const navigation = useNavigation()
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}  >
       <Stack
       >
         <Stack.Screen name="index" options={{ 
           headerTitle: () => (
-            <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
+            <View style={{backgroundColor : colorScheme === "dark" ? "#151515" : "#ffffff" ,display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
             <Pressable onPress={() => navigation.goBack()} >
             <AntDesign
     name="arrowleft"

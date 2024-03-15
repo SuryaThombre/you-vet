@@ -1,3 +1,4 @@
+import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -14,7 +15,12 @@ import { useColorScheme } from "@/components/useColorScheme";
 import { Text, View } from "@/components/Themed";
 import { Pressable } from "react-native";
 import MyHeader from "@/components/profileHeader";
-import { Header, HeaderBackButton, getHeaderTitle } from '@react-navigation/elements';
+import {
+  Header,
+  HeaderBackButton,
+  getHeaderTitle,
+} from "@react-navigation/elements";
+import UserProfileProvider from "@/providers/profileSetUpProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -60,17 +66,19 @@ function RootLayoutNav() {
   return (
     <SafeAreaView edges={["top"]} style={{ flex: 1, backgroundColor: "white" }}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack
-          // initialRouteName="(profileSetUp)"
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          <Stack.Screen
-            name="(profileSetUp)"
-            options={{ headerShown: false }}
-          />
-        </Stack>
+        <UserProfileProvider>
+          <Stack
+            // initialRouteName="(profileSetUp)"
+            screenOptions={{
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen
+              name="(profileSetUp)"
+              options={{ headerShown: false }}
+            />
+          </Stack>
+        </UserProfileProvider>
       </ThemeProvider>
     </SafeAreaView>
   );

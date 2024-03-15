@@ -39,11 +39,11 @@ export default function RootLayout() {
   return <RootLayoutNav colorScheme={colorScheme} />;
 }
 const HeaderProgressBar = ({ progress, canGoBack, handleGoBack, colorScheme }) => (
-  <View style={[styles.headerContainer, colorScheme === 'dark' && styles.headerContainerDark]}>
+  <View style={[styles.headerContainer, colorScheme === 'dark' && styles.headerContainerDark ,[{backgroundColor : colorScheme === "dark" ? "#151515" : "#ffffff" ,}] ]}>
     <View style={styles.progressBar}>
       <View style={[styles.progress, { width: `${progress * 100}%` }]} />
     </View>
-    <View style={styles.headerBottomContainer}>
+    <View style={{...styles.headerBottomContainer,backgroundColor : colorScheme === "dark" ? "#151515" : "#ffffff" ,}}>
       {canGoBack && (
         <Pressable onPress={handleGoBack} style={styles.backButton}>
          <AntDesign
@@ -116,7 +116,7 @@ function RootLayoutNav({ colorScheme }) {
           name="locationScreen"
           options={{
             headerTitle: () => (
-              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
+              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start', gap: 10 ,backgroundColor : colorScheme === "dark" ? "#151515" : "#ffffff" }}>
                 <Pressable onPress={() => navigation.goBack()}>
                   <AntDesign name="arrowleft" size={24} color={colorScheme === 'dark' ? 'white' : 'black'} />
                 </Pressable>
