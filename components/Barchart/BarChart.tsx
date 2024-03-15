@@ -32,9 +32,9 @@ export function BarGraph() {
   const [selectedCityArr, setSelectedCityArr] = useState([]);
   const colorScheme = useColorScheme();
   //functions for filter the bar graph data
-  const { city } = useUserProfile()
+  const { city } = useUserProfile();
   console.log(city, "city");
-  
+
   //function for filter age data
 
   const ageFilterData = (city, vote, minAge, maxAge = Infinity) => {
@@ -636,8 +636,12 @@ export function BarGraph() {
             searchPlaceholder="Search..."
             value={value}
             onChange={(item) => handleDropdownChange(item.value)}
-            overlayStyle={{
-              backgroundColor: colorScheme === "dark" ? "#000000" : "#A9A9A9",
+            containerStyle={{
+              backgroundColor: colorScheme === "dark" ? "#121212" : "#ffffff",
+              borderRadius: 10,
+            }}
+            itemTextStyle={{
+              color: colorScheme === "dark" ? "#ffffff" : "#000000",
             }}
           />
         </View>

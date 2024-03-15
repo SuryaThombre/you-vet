@@ -10,10 +10,9 @@ import { Stack, useNavigation } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { useColorScheme } from "@/components/useColorScheme";
 import { Text, View } from "@/components/Themed";
-import { Pressable } from "react-native";
+import { Pressable, StatusBar } from "react-native";
 import MyHeader from "@/components/profileHeader";
 import {
   Header,
@@ -36,6 +35,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -64,22 +64,34 @@ function RootLayoutNav() {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView edges={["top"]} style={{ flex: 1, backgroundColor: "white" }}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <UserProfileProvider>
-          <Stack
-            // initialRouteName="(profileSetUp)"
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen
-              name="(profileSetUp)"
-              options={{ headerShown: false }}
-            />
-          </Stack>
-        </UserProfileProvider>
-      </ThemeProvider>
-    </SafeAreaView>
+    <>
+      <StatusBar
+        backgroundColor={colorScheme === "dark" ? "#151515" : "#fff"}
+        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+        translucent={false}
+      />
+      <SafeAreaView
+        edges={["top"]}
+        style={{ flex: 1, backgroundColor: "white" }}
+      >
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <UserProfileProvider>
+            <Stack
+              // initialRouteName="(profileSetUp)"
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen
+                name="(profileSetUp)"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+          </UserProfileProvider>
+        </ThemeProvider>
+      </SafeAreaView>
+    </>
   );
 }

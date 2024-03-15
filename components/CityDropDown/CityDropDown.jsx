@@ -8,6 +8,7 @@ import { useUserProfile } from "@/providers/profileSetUpProvider";
 function Dropdown({ getValue }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const colorScheme = useColorScheme();
   const [items, setItems] = useState([
     {
       label: "New York",
@@ -64,8 +65,7 @@ function Dropdown({ getValue }) {
     // extractCity(itemValue);
   };
 
-  const { setCity } = useUserProfile()
-
+  const { setCity } = useUserProfile();
 
   useEffect(() => {
     setValue("New York");
@@ -86,7 +86,7 @@ function Dropdown({ getValue }) {
         });
       }
     }
-    setCity(value)
+    setCity(value);
   }, [value]);
 
   return (
@@ -102,11 +102,28 @@ function Dropdown({ getValue }) {
       maxHeight={200}
       listMode="SCROLLVIEW"
       style={{
-        width: "95%",
+        width: "100%",
         alignSelf: "center",
         borderRadius: 25,
         marginVertical: 10,
-        borderColor: "lightgray",
+        borderColor: colorScheme === "dark" ? "#555555" : "lightgray",
+        backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
+      }}
+      textStyle={{
+        color: colorScheme === "dark" ? "#ffffff" : "#151515", // Font color
+      }}
+      dropDownContainerStyle={{
+        borderColor: colorScheme === "dark" ? "#555555" : "lightgray",
+        backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
+      }}
+      showArrowIcon={true}
+      tickIconStyle={{
+        backgroundColor: colorScheme === "dark" ? "#ffffff" : "#151515",
+        borderRadius: 50,
+      }}
+      arrowIconStyle={{
+        backgroundColor: colorScheme === "dark" ? "#ffffff" : "#151515",
+        borderRadius: 50,
       }}
     />
   );
@@ -136,19 +153,106 @@ export default function CityDropDown() {
       });
   };
 
-  const LightDark = [ { "elementType": "geometry", "stylers": [ { "color": "#242F3E" } ] }, { "elementType": "labels.text.fill", "stylers": [ { "color": "#746855" } ] }, { "elementType": "labels.text.stroke", "stylers": [ { "color": "#242F3E" } ] }, { "featureType": "administrative.locality", "elementType": "labels.text.fill", "stylers": [ { "color": "#D59563" } ] }, { "featureType": "poi", "elementType": "labels.text.fill", "stylers": [ { "color": "#D59563" } ] }, { "featureType": "poi.park", "elementType": "geometry", "stylers": [ { "color": "#263C3F" } ] }, { "featureType": "poi.park", "elementType": "labels.text.fill", "stylers": [ { "color": "#6B9A76" } ] }, { "featureType": "road", "elementType": "geometry", "stylers": [ { "color": "#38414E" } ] }, { "featureType": "road", "elementType": "geometry.stroke", "stylers": [ { "color": "#212A37" } ] }, { "featureType": "road", "elementType": "labels.text.fill", "stylers": [ { "color": "#9CA5B3" } ] }, { "featureType": "road.highway", "elementType": "geometry", "stylers": [ { "color": "#746855" } ] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [ { "color": "#1F2835" } ] }, { "featureType": "road.highway", "elementType": "labels.text.fill", "stylers": [ { "color": "#F3D19C" } ] }, { "featureType": "transit", "elementType": "geometry", "stylers": [ { "color": "#2F3948" } ] }, { "featureType": "transit.station", "elementType": "labels.text.fill", "stylers": [ { "color": "#D59563" } ] }, { "featureType": "water", "elementType": "geometry", "stylers": [ { "color": "#17263C" } ] }, { "featureType": "water", "elementType": "labels.text.fill", "stylers": [ { "color": "#515C6D" } ] }, { "featureType": "water", "elementType": "labels.text.stroke", "stylers": [ { "color": "#17263C" } ] } ]
+  const LightDark = [
+    { elementType: "geometry", stylers: [{ color: "#242F3E" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#242F3E" }] },
+    {
+      featureType: "administrative.locality",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#D59563" }],
+    },
+    {
+      featureType: "poi",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#D59563" }],
+    },
+    {
+      featureType: "poi.park",
+      elementType: "geometry",
+      stylers: [{ color: "#263C3F" }],
+    },
+    {
+      featureType: "poi.park",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#6B9A76" }],
+    },
+    {
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [{ color: "#38414E" }],
+    },
+    {
+      featureType: "road",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#212A37" }],
+    },
+    {
+      featureType: "road",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#9CA5B3" }],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "geometry",
+      stylers: [{ color: "#746855" }],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#1F2835" }],
+    },
+    {
+      featureType: "road.highway",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#F3D19C" }],
+    },
+    {
+      featureType: "transit",
+      elementType: "geometry",
+      stylers: [{ color: "#2F3948" }],
+    },
+    {
+      featureType: "transit.station",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#D59563" }],
+    },
+    {
+      featureType: "water",
+      elementType: "geometry",
+      stylers: [{ color: "#17263C" }],
+    },
+    {
+      featureType: "water",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#515C6D" }],
+    },
+    {
+      featureType: "water",
+      elementType: "labels.text.stroke",
+      stylers: [{ color: "#17263C" }],
+    },
+  ];
 
   return (
-    <View style={{backgroundColor: colorScheme === 'dark' ? '#151515' : '#ffffff'}}>
+    <View
+      style={{
+        backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
+      }}
+    >
       <Dropdown getValue={setLocation} />
       <MapView
-        style={{ width: "100%", height: 300, backgroundColor:  colorScheme === 'dark' ? '#151515' : '#ffffff' }}
+        style={{
+          width: "100%",
+          height: 300,
+          backgroundColor: colorScheme === "dark" ? "#151515" : "#ffffff",
+        }}
         provider={PROVIDER_GOOGLE}
         region={location}
         showsUserLocation
         showsMyLocationButton
         onPress={(event) => onSelectLocation(event)}
-        customMapStyle={colorScheme === 'dark' ? LightDark : []}
+        customMapStyle={colorScheme === "dark" ? LightDark : []}
       >
         {location.latitude && location.longitude && (
           <Marker
